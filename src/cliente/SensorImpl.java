@@ -12,8 +12,14 @@ public class SensorImpl extends UnicastRemoteObject implements Sensor {
 		l = new LinkedList<Alarma>();
 	}
 
-	
 
+	@Override
+	public void setAlarma(Alarma alarma) {
 
+	}
 
+	@Override
+	public Alarma getListaAlarmas() {
+		return null;
+	}
 }

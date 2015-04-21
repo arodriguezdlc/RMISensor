@@ -7,10 +7,16 @@ class ServicioAlarmasImpl extends UnicastRemoteObject implements ServicioAlarmas
 	ServicioAlarmasImpl() throws RemoteException {
 		l = new LinkedList<Sensor>();
 	}
+
 	public void alta(Sensor s) throws RemoteException {
 		l.add(s);
 	}
+
 	public void baja(Sensor s) throws RemoteException {
 		l.remove(l.indexOf(s));
-	}	
+	}
+
+	public void enviaAlarma() throws RemoteException {
+
+	}
 }
