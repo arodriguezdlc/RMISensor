@@ -16,6 +16,7 @@ public class MonitorTest {
         m.start();
         for (int i = 0; i < 10; i++) {
             value = m.getCPU();
+            System.out.println(value.toString());
             if (value < 0 || value > 1) {
                 fail("Valor no válido de CPU");
             } else {

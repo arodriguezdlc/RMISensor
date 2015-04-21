@@ -30,8 +30,11 @@ public class Monitor extends Thread {
 	synchronized private void setCPU(Long cpu) {
 		this.cpu = cpu;
 	}
-	public Long getRam() {
+	synchronized public Long getRam() {
 		return this.ram;
+	}
+	synchronized private void setRam(Long ram) {
+		this.ram = ram;
 	}
 	/*public Long getDisk() {
 		return this.disk;
@@ -60,8 +63,8 @@ public class Monitor extends Thread {
 				if (0 > (cpu = Double.valueOf(bean.getSystemCpuLoad()).longValue())) {
 					this.setCPU(cpu * 100);
 				}
-				this.ram = this.getPorcentajeMemoria(bean.getFreePhysicalMemorySize(),
-						bean.getTotalPhysicalMemorySize());
+				this.setRam(this.getPorcentajeMemoria(bean.getFreePhysicalMemorySize(),
+						bean.getTotalPhysicalMemorySize()));
 				//TODO disk
 				try {
 					Thread.sleep(this.tiempoMuestreo);
