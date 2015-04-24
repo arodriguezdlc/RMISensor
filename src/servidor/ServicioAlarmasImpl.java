@@ -2,7 +2,7 @@ import java.util.*;
 import java.rmi.*;
 import java.rmi.server.*;
 
-class ServicioAlarmasImpl extends UnicastRemoteObject implements ServicioAlarmas {
+public class ServicioAlarmasImpl extends UnicastRemoteObject implements ServicioAlarmas {
 	List<Sensor> l;
 
 	ServicioAlarmasImpl() throws RemoteException {
@@ -21,5 +21,8 @@ class ServicioAlarmasImpl extends UnicastRemoteObject implements ServicioAlarmas
 		for(Alarma a : listaAlarmasActivadas) {
 			System.out.println(a.toString());
 		}
+	}
+	public List<Sensor> getListaSensores() {
+		return this.l;
 	}
 }

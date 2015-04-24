@@ -2,10 +2,10 @@ import java.util.*;
 import java.rmi.*;
 import java.rmi.server.*;
 
-class Cliente {
+public class Cliente {
     static public void main (String args[]) {
-        if (args.length!=3) {
-            System.err.println("Uso: Cliente hostregistro numPuertoRegistro tiempoMuestreo(ms)");
+        if (args.length!=4) {
+            System.err.println("Uso: Cliente hostregistro numPuertoRegistro SensorName tiempoMuestreo(ms)");
             return;
         }
 
@@ -14,8 +14,13 @@ class Cliente {
 
         try {
             ServicioAlarmas srv = (ServicioAlarmas) Naming.lookup("//" + args[0] + ":" + args[1] + "/RMISensor");
-            Sensor s = new SensorImpl(Integer.parseInt(args[2]), srv);
+            SensorImpl s = new SensorImpl(Integer.parseInt(args[3]), srv, args[2]);
             srv.alta(s);
+            System.out.println("Sensor activado, pulse enter para desactivar");
+            Scanner input = new Scanner(System.in);
+            input.next();
+            srv.baja(s);
+            s.apagaMonitor();
         }
         catch (RemoteException e) {
             System.err.println("Error de comunicacion: " + e.toString());

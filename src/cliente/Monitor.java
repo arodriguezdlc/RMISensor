@@ -120,20 +120,24 @@ public class Monitor extends Thread {
 			if(a.getParametro().equals("CPU")) {
 				if(a.getEsMayorQueUmbral()) {
 					if(a.getUmbral() < this.getCPU()) {
+						a.setFecha(new Date());
 						alarmasActivadas.add(a);
 					}
 				} else {
 					if(a.getUmbral() > this.getCPU()) {
+						a.setFecha(new Date());
 						alarmasActivadas.add(a);
 					}
 				}
 			} else if (a.getParametro().equals("RAM")) {
 				if(a.getEsMayorQueUmbral()) {
 					if(a.getUmbral() < this.getRam()) {
+						a.setFecha(new Date());
 						alarmasActivadas.add(a);
 					}
 				} else {
 					if(a.getUmbral() > this.getRam()) {
+						a.setFecha(new Date());
 						alarmasActivadas.add(a);
 					}
 				}

@@ -7,14 +7,14 @@ public class Alarma implements Serializable{
 	private String titulo;		//Solo puede ser editado en la creacion del objeto
 	private String descripcion;	//Solo puede ser editado en la creacion del objeto
 	private String parametro;	//Solo puede ser editado en la creacion del objeto.
-	private Integer umbral;	//Solo puede editado en la creacion del objeto.
+	private Double umbral;	//Solo puede editado en la creacion del objeto.
 	private Boolean esMayorQueUmbral; //Solo puede ser editado en la creación del objeto.
 	private Date fecha;	//Editado por el cliente cuando se produce la alarma.
 	private String prioridad; //Solo puede ser editado en la creacion del objeto.
 
 	/* Constructores */
-	public void Alarma(String titulo, String descripcion, String parametro, 
-		Integer umbral, Boolean esMayorQueUmbral, String prioridad) {
+	public Alarma(String titulo, String descripcion, String parametro,
+		Double umbral, Boolean esMayorQueUmbral, String prioridad) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;		
 		this.prioridad = prioridad;
@@ -34,7 +34,7 @@ public class Alarma implements Serializable{
 	public String getParametro() {
 		return this.parametro;
 	}
-	public Integer getUmbral() {
+	public Double getUmbral() {
 		return this.umbral;
 	}
 	public Boolean getEsMayorQueUmbral() {
@@ -51,7 +51,7 @@ public class Alarma implements Serializable{
 	}
 
 	public String toString() {
-		return fecha + "  -> ¡ALARMA " + prioridad + "!\n" + "\tTitulo: " + titulo +
+		return fecha + "  -> ALARMA " + prioridad + "\n" + "\tTitulo: " + titulo +
 			"\n\tDescripcion:" + descripcion;
 	}
 }
