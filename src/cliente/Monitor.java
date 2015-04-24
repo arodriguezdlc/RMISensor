@@ -1,6 +1,8 @@
 import java.lang.management.ManagementFactory;
 import com.sun.management.OperatingSystemMXBean;
-import java.util.logging.*;
+
+import java.rmi.RemoteException;
+import java.util.*;
 
 public class Monitor extends Thread {
 	/** 
@@ -8,33 +10,62 @@ public class Monitor extends Thread {
 	 * mediante los metodos get correspondientes. Utiliza librerias del sistema para obtener esos valores.
 	 */
 
-	private static final Logger logger =
-			Logger.getLogger(Monitor.class.getName());
-	
 	/* Parametros */
 	volatile private Long cpu;
 	volatile private Long ram;
 	//volatile private Long disk;
 	private Integer tiempoMuestreo; //Para asignar un tiempo de muestreo al monitor en ms.	
 	private boolean threadRunFlag;
-	/* Constructor */
+	private List<Alarma> listaAlarmas;
+	private ServicioAlarmas srv;
 
-	Monitor(Integer tiempoMuestreo) {
+	/* Constructor */
+	Monitor(Integer tiempoMuestreo, ServicioAlarmas srv) {
 		this.setTiempoMuestreo(tiempoMuestreo);
+		this.srv = srv;
+		this.start();    // Se inicia el hilo al crear el objeto.
 	}
 
 	/* Metodos */
 	synchronized public Long getCPU() {
-		return this.cpu;
+		Long cpu = Long.valueOf(0);
+		try {
+			wait();
+			cpu = this.cpu;
+			notify();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return cpu;
 	}
 	synchronized private void setCPU(Long cpu) {
-		this.cpu = cpu;
+		try {
+			wait();
+			this.cpu = cpu;
+			notify();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	synchronized public Long getRam() {
-		return this.ram;
+		Long ram = Long.valueOf(0);
+		try {
+			wait();
+			ram = this.ram;
+			notify();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return ram;
 	}
 	synchronized private void setRam(Long ram) {
-		this.ram = ram;
+		try {
+			wait();
+			this.ram = ram;
+			notify();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	/*public Long getDisk() {
 		return this.disk;
@@ -42,12 +73,15 @@ public class Monitor extends Thread {
 	public Integer getTiempoMuestreo() {
 		return this.tiempoMuestreo;
 	}
-	public void setTiempoMuestreo(Integer tiempoMuestreo) {
+	private void setTiempoMuestreo(Integer tiempoMuestreo) {
 		this.tiempoMuestreo = tiempoMuestreo;
+	}
+	synchronized public void setListaAlarmas(List<Alarma> listaAlarmas) {
+		this.listaAlarmas = listaAlarmas;
 	}
 
 	@Override
-	public void run() {
+	public void run() throws RemoteException {
 		/**
 			Metodo run que se ejecuta en otro hilo. Se encarga de obtener los valores de CPU y RAM del PC
 			y almacenarlo en las variables de la clase.
@@ -66,10 +100,11 @@ public class Monitor extends Thread {
 				this.setRam(this.getPorcentajeMemoria(bean.getFreePhysicalMemorySize(),
 						bean.getTotalPhysicalMemorySize()));
 				//TODO disk
+
+				this.compruebaAlarmas();
 				try {
 					Thread.sleep(this.tiempoMuestreo);
-				} catch (InterruptedException e) {
-				}
+				} catch (InterruptedException e) {}
 			}
 			this.join();
 		} catch (InterruptedException e) {
@@ -88,5 +123,49 @@ public class Monitor extends Thread {
 
 	private Long getPorcentajeMemoria(Long memoriaLibre, Long memoriaTotal) {
 		return ((1-memoriaLibre)/memoriaTotal) * 100;
+	}
+
+	private void compruebaAlarmas() throws RemoteException {
+		List<Alarma> alarmasActivadas = new LinkedList<Alarma>();
+		for (Alarma a: listaAlarmas) {
+			if(a.getParametro().equals("CPU")) {
+				if(a.getEsMayorQueUmbral()) {
+					if(a.getUmbral() < this.getCPU()) {
+						alarmasActivadas.add(a);
+					}
+				} else {
+					if(a.getUmbral() > this.getCPU()) {
+						alarmasActivadas.add(a);
+					}
+				}
+			} else if (a.getParametro().equals("RAM")) {
+				if(a.getEsMayorQueUmbral()) {
+					if(a.getUmbral() < this.getRam()) {
+						alarmasActivadas.add(a);
+					}
+				} else {
+					if(a.getUmbral() > this.getRam()) {
+						alarmasActivadas.add(a);
+					}
+				}
+			/*} else if (a.getParametro().equals("DISK")) {
+				if(a.getEsMayorQueUmbral()) {
+					if(a.getUmbral() < this.getDisk()) {
+						alarmasActivadas.add(a);
+					}
+				} else {
+					if(a.getUmbral() > this.getDisk()) {
+						alarmasActivadas.add(a);
+					}
+				}*/
+			} /*else {
+				//throw UnexpectedException;
+
+			}*/
+		}
+		//Enviamos lista de alarmas
+		if(!alarmasActivadas.isEmpty()) {
+			srv.enviaListaAlarmas(alarmasActivadas);
+		}
 	}
 }

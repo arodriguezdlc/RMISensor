@@ -12,7 +12,7 @@ public class Servidor  {
         }
         try {
             ServicioAlarmasImpl srv = new ServicioAlarmasImpl();
-            Naming.rebind("rmi://localhost:" + args[0] + "/Alarmas", srv);
+            Naming.rebind("rmi://localhost:" + args[0] + "/RMISensor", srv);
         }
         catch (RemoteException e) {
             System.err.println("Error de comunicacion: " + e.toString());

@@ -6,20 +6,25 @@ public class SensorImpl extends UnicastRemoteObject implements Sensor {
 
 	/* Atributos */
 	List<Alarma> l;
+	Monitor m;
 
 	/* Constructores */
-	SensorImpl() throws RemoteException {
+	SensorImpl(Integer tiempoMuestreo, ServicioAlarmas srv) throws RemoteException {
 		l = new LinkedList<Alarma>();
+		m = new Monitor(tiempoMuestreo, srv);
 	}
-
-
+	/* Metodos */
 	@Override
-	public void setAlarma(Alarma alarma) {
-
+	public void crearAlarma(Alarma alarma) {
+		l.add(alarma);
+		m.setListaAlarmas(l); //Actualizamos lista de alarmas del monitor
 	}
-
+	public void eliminarAlarma(Alarma alarma) {
+		l.remove(l.indexOf(alarma));
+		m.setListaAlarmas(l); //Actualizamos lista de alarmas del monitor
+	}
 	@Override
-	public Alarma getListaAlarmas() {
-		return null;
+	public List<Alarma>getListaAlarmas() {
+		return this.l;
 	}
 }

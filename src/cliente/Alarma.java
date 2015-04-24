@@ -21,6 +21,7 @@ public class Alarma implements Serializable{
 		this.parametro = parametro;
 		this.umbral = umbral;
 		this.esMayorQueUmbral = esMayorQueUmbral;
+
 	}
 
 	/* Metodos */
@@ -53,6 +54,4 @@ public class Alarma implements Serializable{
 		return fecha + "  -> ¡ALARMA " + prioridad + "!\n" + "\tTitulo: " + titulo +
 			"\n\tDescripcion:" + descripcion;
 	}
-
-
 }
