@@ -11,61 +11,40 @@ public class Monitor extends Thread {
 	 */
 
 	/* Parametros */
-	volatile private Long cpu;
-	volatile private Long ram;
+	private double cpu;
+	private long ram;
 	//volatile private Long disk;
-	private Integer tiempoMuestreo; //Para asignar un tiempo de muestreo al monitor en ms.	
+	private Integer tiempoMuestreo = new Integer(0); //Para asignar un tiempo de muestreo al monitor en ms.
 	private boolean threadRunFlag;
 	private List<Alarma> listaAlarmas;
 	private ServicioAlarmas srv;
 
 	/* Constructor */
-	Monitor(Integer tiempoMuestreo, ServicioAlarmas srv) {
+	Monitor(Integer tiempoMuestreo, ServicioAlarmas srv, List<Alarma> listaAlarmas) {
 		this.setTiempoMuestreo(tiempoMuestreo);
 		this.srv = srv;
-		this.start();    // Se inicia el hilo al crear el objeto.
+		this.setListaAlarmas(listaAlarmas);
+		this.start();   // Se inicia el hilo al crear el objeto.
+	}
+	Monitor(Integer tiempoMuestreo, List<Alarma> listaAlarmas) {
+		this.setTiempoMuestreo(tiempoMuestreo);
+		this.srv = null;
+		this.setListaAlarmas(listaAlarmas);
+		this.start();
 	}
 
 	/* Metodos */
-	synchronized public Long getCPU() {
-		Long cpu = Long.valueOf(0);
-		try {
-			wait();
-			cpu = this.cpu;
-			notify();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return cpu;
+ 	synchronized public double getCPU() {
+		return this.cpu;
 	}
-	synchronized private void setCPU(Long cpu) {
-		try {
-			wait();
-			this.cpu = cpu;
-			notify();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	synchronized private void setCPU(double cpu) {
+		this.cpu = cpu;
 	}
-	synchronized public Long getRam() {
-		Long ram = Long.valueOf(0);
-		try {
-			wait();
-			ram = this.ram;
-			notify();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return ram;
+	synchronized public long getRam() {
+		return this.ram;
 	}
-	synchronized private void setRam(Long ram) {
-		try {
-			wait();
-			this.ram = ram;
-			notify();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	synchronized private void setRam(long ram) {
+		this.ram = ram;
 	}
 	/*public Long getDisk() {
 		return this.disk;
@@ -81,30 +60,38 @@ public class Monitor extends Thread {
 	}
 
 	@Override
-	public void run() throws RemoteException {
+	public void run() {
 		/**
 			Metodo run que se ejecuta en otro hilo. Se encarga de obtener los valores de CPU y RAM del PC
 			y almacenarlo en las variables de la clase.
 		*/
 		try {
-			Long cpu;
+			Double cpu;
+			Long ram;
 			this.threadRunFlag = true;
 
 			OperatingSystemMXBean bean =
 					(com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
 			while (this.threadRunFlag) {
-				if (0 > (cpu = Double.valueOf(bean.getSystemCpuLoad()).longValue())) {
-					this.setCPU(cpu * 100);
-				}
+				/*if (0 >= (*/cpu = bean.getSystemCpuLoad()/*)) {*/;
+					this.setCPU(cpu);
+				//}
 				this.setRam(this.getPorcentajeMemoria(bean.getFreePhysicalMemorySize(),
 						bean.getTotalPhysicalMemorySize()));
 				//TODO disk
 
-				this.compruebaAlarmas();
+
 				try {
+					if(!this.listaAlarmas.isEmpty()) {
+						this.compruebaAlarmas();
+					}
 					Thread.sleep(this.tiempoMuestreo);
-				} catch (InterruptedException e) {}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
 			}
 			this.join();
 		} catch (InterruptedException e) {
@@ -121,8 +108,10 @@ public class Monitor extends Thread {
 		this.threadRunFlag = false;
 	}
 
-	private Long getPorcentajeMemoria(Long memoriaLibre, Long memoriaTotal) {
-		return ((1-memoriaLibre)/memoriaTotal) * 100;
+	private long getPorcentajeMemoria(Long memoriaLibre, Long memoriaTotal) {
+		long ml = memoriaLibre.longValue();
+		long mt = memoriaTotal.longValue();
+		return (mt-ml)*100/mt;
 	}
 
 	private void compruebaAlarmas() throws RemoteException {
@@ -164,7 +153,7 @@ public class Monitor extends Thread {
 			}*/
 		}
 		//Enviamos lista de alarmas
-		if(!alarmasActivadas.isEmpty()) {
+		if((!alarmasActivadas.isEmpty()) && (srv != null)) {
 			srv.enviaListaAlarmas(alarmasActivadas);
 		}
 	}

@@ -1,27 +1,31 @@
 import org.junit.Test;
 
+import java.util.*;
+
 import static org.junit.Assert.*;
+
 
 /**
  * Created by alberto on 21/4/15.
  */
 public class MonitorTest {
 
-    private static final int tiempoMuestreo = 2000;
+    private static final Integer tiempoMuestreo = 2000;
 
     @Test
     public void testRun() throws Exception {
-        Monitor m = new Monitor(tiempoMuestreo);
-        Long value;
-        m.start();
+        List<Alarma> l = new LinkedList<Alarma>();
+        Monitor m = new Monitor(tiempoMuestreo, l);
         for (int i = 0; i < 10; i++) {
-            value = m.getCPU();
-            System.out.println(value.toString());
-            if (value < 0 || value > 1) {
+            double cpu = m.getCPU();
+            if ( cpu < (double) 0 || cpu > (double) 100) {
                 fail("Valor no válido de CPU");
             } else {
-                System.out.println("CPU = " + value.toString());
+                System.out.println("CPU = " + Double.valueOf(cpu).toString());
             }
+
+            System.out.println("RAM = " + Long.valueOf(m.getRam()).toString());
+            try { Thread.sleep(1000); } catch(InterruptedException e) { }
         }
         m.stopThread();
     }

@@ -4,7 +4,7 @@ import java.rmi.server.*;
 
 class Cliente {
     static public void main (String args[]) {
-        if (args.length!=4) {
+        if (args.length!=3) {
             System.err.println("Uso: Cliente hostregistro numPuertoRegistro tiempoMuestreo(ms)");
             return;
         }

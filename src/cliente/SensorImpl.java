@@ -11,7 +11,7 @@ public class SensorImpl extends UnicastRemoteObject implements Sensor {
 	/* Constructores */
 	SensorImpl(Integer tiempoMuestreo, ServicioAlarmas srv) throws RemoteException {
 		l = new LinkedList<Alarma>();
-		m = new Monitor(tiempoMuestreo, srv);
+		m = new Monitor(tiempoMuestreo, srv, l);
 	}
 	/* Metodos */
 	@Override
