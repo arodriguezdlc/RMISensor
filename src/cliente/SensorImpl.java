@@ -17,19 +17,20 @@ public class SensorImpl extends UnicastRemoteObject implements Sensor {
 	}
 	/* Metodos */
 	@Override
-	public void crearAlarma(Alarma alarma) {
+	public void crearAlarma(Alarma alarma) throws RemoteException {
 		l.add(alarma);
 		m.setListaAlarmas(l); //Actualizamos lista de alarmas del monitor
+		System.out.println("Creada nueva alarma");
 	}
-	public void eliminarAlarma(Alarma alarma) {
+	public void eliminarAlarma(Alarma alarma) throws RemoteException {
 		l.remove(l.indexOf(alarma));
 		m.setListaAlarmas(l); //Actualizamos lista de alarmas del monitor
 	}
-	public String getSensorName() {
+	public String getSensorName() throws RemoteException {
 		return this.sensorName;
 	}
 	@Override
-	public List<Alarma>getListaAlarmas() {
+	public List<Alarma> getListaAlarmas() throws RemoteException {
 		return this.l;
 	}
 	public void apagaMonitor() {

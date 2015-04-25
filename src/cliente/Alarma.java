@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.Date;
 
-public class Alarma implements Serializable{
+public class Alarma implements Serializable {
 
 	/* Atributos */
 	private String titulo;		//Solo puede ser editado en la creacion del objeto

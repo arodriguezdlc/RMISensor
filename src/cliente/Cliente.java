@@ -18,9 +18,10 @@ public class Cliente {
             srv.alta(s);
             System.out.println("Sensor activado, pulse enter para desactivar");
             Scanner input = new Scanner(System.in);
-            input.next();
+            input.nextLine();
             srv.baja(s);
             s.apagaMonitor();
+            System.exit(0);
         }
         catch (RemoteException e) {
             System.err.println("Error de comunicacion: " + e.toString());

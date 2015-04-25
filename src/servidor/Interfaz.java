@@ -1,3 +1,4 @@
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,13 +18,14 @@ public class Interfaz {
         System.out.println("0) Regenerar menu");
         System.out.println("1) Ver sensores");
         System.out.println("2) Crear nueva Alarma");
+        System.out.println("3) Ver alarmas");
         System.out.println("q) Apagar Servidor");
 
         System.out.println("\nSeleccione una opcion: ");
 
     }
 
-    public void ejecutaOpcion() {
+    public void ejecutaOpcion() throws RemoteException {
         Scanner input = new Scanner(System.in);
         String opcion = new String();
         while (!opcion.equals("q")) {
@@ -38,6 +40,12 @@ public class Interfaz {
                 case "2":
                     this.crearAlarma();
                     break;
+                case "3":
+                    this.verAlarmas();
+                    break;
+                case "q":
+                    System.out.println("Apagando servidor");
+                    break;
                 default:
                     System.out.println("Opcion no valida");
                     break;
@@ -45,17 +53,17 @@ public class Interfaz {
         }
     }
 
-    private void printSensores() {
+    private void printSensores() throws RemoteException {
         List<Sensor> listaSensores = srv.getListaSensores();
         System.out.println("LISTA DE SENSORES: ");
+        int i = 0;
         for (Sensor s : listaSensores) {
-            int i = 0;
             System.out.println(Integer.valueOf(i).toString() + ")\t" + s.getSensorName());
             i++;
         }
     }
 
-    private void crearAlarma() {
+    private void crearAlarma() throws RemoteException {
         Scanner input = new Scanner(System.in);
         boolean salir = true;
         Boolean esMayorQueUmbralBool = true;
@@ -78,6 +86,7 @@ public class Interfaz {
 
         System.out.print("Introduzca umbral");
         String umbral = input.next();
+
         do {
             System.out.print("¿Alarma si es mayor que umbral? (Y/N)");
             String esMayorQueUmbral = input.next();
@@ -93,6 +102,17 @@ public class Interfaz {
         s.crearAlarma(new Alarma(titulo, descripcion, parametro,
                 Double.valueOf(umbral), esMayorQueUmbralBool, prioridad));
 
+    }
+    private void verAlarmas() throws RemoteException {
+        System.out.println("Introduzca el numero de sensor:");
+        Scanner input = new Scanner(System.in);
+        String numSensor = input.next();
+        Sensor s = srv.getListaSensores().get(Integer.parseInt(numSensor));
+        List<Alarma> listaAlarmas = s.getListaAlarmas();
+        System.out.println("Lista de alarmas del sensor " + s.getSensorName());
+        for(Alarma a : listaAlarmas) {
+            System.out.println(a.toString());
+        }
     }
 }
 
