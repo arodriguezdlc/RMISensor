@@ -2,9 +2,6 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Created by alberto on 24/4/15.
- */
 public class Interfaz {
     ServicioAlarmasImpl srv;
 
@@ -69,23 +66,23 @@ public class Interfaz {
         Boolean esMayorQueUmbralBool = true;
 
         System.out.println("Introduzca el numero del sensor: ");
-        String sensorNumber = input.nextLine();
+        String sensorNumber = input.next();
         Sensor s = srv.getListaSensores().get(Integer.parseInt(sensorNumber));
 
         System.out.print("Introduzca titulo alarma: ");
-        String titulo = input.nextLine();
+        String titulo = input.next();
 
-        System.out.print("Introduzca descripcion alarma ");
-        String descripcion = input.nextLine();
+        System.out.print("Introduzca descripcion alarma: ");
+        String descripcion = input.next();
 
-        System.out.print("Introduzca prioridad alarma ");
-        String prioridad = input.nextLine();
+        System.out.print("Introduzca prioridad alarma: ");
+        String prioridad = input.next();
 
-        System.out.print("Introduzca parametro ");
-        String parametro = input.nextLine();
+        System.out.print("Introduzca parametro: ");
+        String parametro = input.next();
 
-        System.out.print("Introduzca umbral");
-        String umbral = input.nextLine();
+        System.out.print("Introduzca umbral: ");
+        String umbral = input.next();
 
         do {
             System.out.print("¿Alarma si es mayor que umbral? (Y/N)");

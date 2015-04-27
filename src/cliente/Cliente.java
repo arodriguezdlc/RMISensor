@@ -27,7 +27,7 @@ public class Cliente {
             System.err.println("Error de comunicacion: " + e.toString());
         }
         catch (Exception e) {
-            System.err.println("Excepcion en ClienteFabricaLog:");
+            System.err.println("Excepcion en Cliente");
             e.printStackTrace();
         }
     }

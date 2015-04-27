@@ -62,8 +62,8 @@ public class Monitor extends Thread {
 	@Override
 	public void run() {
 		/**
-			Metodo run que se ejecuta en otro hilo. Se encarga de obtener los valores de CPU y RAM del PC
-			y almacenarlo en las variables de la clase.
+		*	Metodo run que se ejecuta en otro hilo. Se encarga de obtener los valores de CPU y RAM del PC
+		*	y almacenarlo en las variables de la clase.
 		*/
 		try {
 			Double cpu;
