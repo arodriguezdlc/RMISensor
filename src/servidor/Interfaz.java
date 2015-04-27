@@ -69,23 +69,23 @@ public class Interfaz {
         Boolean esMayorQueUmbralBool = true;
 
         System.out.println("Introduzca el numero del sensor: ");
-        String sensorNumber = input.next();
+        String sensorNumber = input.nextLine();
         Sensor s = srv.getListaSensores().get(Integer.parseInt(sensorNumber));
 
         System.out.print("Introduzca titulo alarma: ");
-        String titulo = input.next();
+        String titulo = input.nextLine();
 
         System.out.print("Introduzca descripcion alarma ");
-        String descripcion = input.next();
+        String descripcion = input.nextLine();
 
         System.out.print("Introduzca prioridad alarma ");
-        String prioridad = input.next();
+        String prioridad = input.nextLine();
 
         System.out.print("Introduzca parametro ");
-        String parametro = input.next();
+        String parametro = input.nextLine();
 
         System.out.print("Introduzca umbral");
-        String umbral = input.next();
+        String umbral = input.nextLine();
 
         do {
             System.out.print("¿Alarma si es mayor que umbral? (Y/N)");
