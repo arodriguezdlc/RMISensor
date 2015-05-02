@@ -62,12 +62,19 @@ public class Interfaz {
 
     private void crearAlarma() throws RemoteException {
         Scanner input = new Scanner(System.in);
-        boolean salir = true;
         Boolean esMayorQueUmbralBool = true;
+        Sensor s = null;
 
-        System.out.println("Introduzca el numero del sensor: ");
-        String sensorNumber = input.next();
-        Sensor s = srv.getListaSensores().get(Integer.parseInt(sensorNumber));
+        do {
+            this.printSensores();
+            System.out.println("Introduzca el numero del sensor: ");
+            String sensorNumber = input.next();
+            try {
+                s = srv.getListaSensores().get(Integer.parseInt(sensorNumber));
+            }catch (IndexOutOfBoundsException e){
+                System.out.println("El indice especificado es inválido");
+            }
+        }while(s == null);
 
         System.out.print("Introduzca titulo alarma: ");
         String titulo = input.next();
@@ -75,16 +82,33 @@ public class Interfaz {
         System.out.print("Introduzca descripcion alarma: ");
         String descripcion = input.next();
 
-        System.out.print("Introduzca prioridad alarma: ");
+        System.out.print("Introduzca prioridad alarma [alta/media/baja]: ");
         String prioridad = input.next();
 
-        System.out.print("Introduzca parametro: ");
+        System.out.print("Introduzca parametro[CPU/RAM]: ");
         String parametro = input.next();
 
-        System.out.print("Introduzca umbral: ");
-        String umbral = input.next();
-
+        String umbral = null;
+        boolean thresholdValid = true;
         do {
+            thresholdValid = true;
+            System.out.print("Introduzca umbral: ");
+            umbral = input.next();
+
+            try {
+                if (Float.valueOf(umbral) < 0.0) {
+                    System.out.println("El valor introducido debe ser mayor que 0.");
+                    thresholdValid = false;
+                }
+            }catch (NumberFormatException e){
+                System.out.println("El valor introducido no es un numero");
+                thresholdValid = false;
+            }
+        } while(!thresholdValid);
+
+        boolean salir = true;
+        do {
+            salir = true;
             System.out.print("¿Alarma si es mayor que umbral? (Y/N)");
             String esMayorQueUmbral = input.next();
             if (esMayorQueUmbral.equals("Y")) {
@@ -101,6 +125,7 @@ public class Interfaz {
 
     }
     private void verAlarmas() throws RemoteException {
+        this.printSensores();
         System.out.println("Introduzca el numero de sensor:");
         Scanner input = new Scanner(System.in);
         String numSensor = input.next();
