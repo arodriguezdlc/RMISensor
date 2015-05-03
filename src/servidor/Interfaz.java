@@ -12,6 +12,7 @@ public class Interfaz {
     }
 
     public void menu() {
+        System.out.print("\033[H\033[2J");
 
         System.out.println("\nRMISENSOR\n");
         System.out.println("0) Regenerar menu");
@@ -21,7 +22,6 @@ public class Interfaz {
         System.out.println("q) Apagar Servidor");
 
         System.out.println("\nSeleccione una opcion: ");
-
     }
 
     public void ejecutaOpcion() throws RemoteException {
@@ -30,31 +30,25 @@ public class Interfaz {
         while (!opcion.equals("q")) {
             opcion = input.next();
             switch (opcion) {
-                case "0":
-                    System.out.print("\033[H\033[2J");
+                case "0":                    
                     this.menu();
                     break;
-                case "1":
-                    System.out.print("\033[H\033[2J");
+                case "1":                    
                     this.printSensores();
                     this.menu();
                     break;
-                case "2":
-                    System.out.print("\033[H\033[2J");
+                case "2":                    
                     this.crearAlarma();
                     this.menu();
                     break;
-                case "3":
-                    System.out.print("\033[H\033[2J");
+                case "3":                    
                     this.verAlarmas();
                     this.menu();
                     break;
-                case "q":                    
-                    System.out.println("Apagando servidor");
+                case "q":                                        
                     this.menu();
                     break;
-                default:
-                    System.out.print("\033[H\033[2J");
+                default:                    
                     System.out.println("Opcion no valida");
                     this.menu();
                     break;
