@@ -82,18 +82,24 @@ public class Interfaz {
         System.out.print("Introduzca descripcion alarma: ");
         String descripcion = input.nextLine();
 
-        System.out.print("Introduzca prioridad alarma [alta/media/baja]: ");
-        String prioridad = input.nextLine();
+        String prioridad;
+        do {
+            System.out.print("Introduzca prioridad alarma [alta/media/baja]: ");
+            prioridad = input.nextLine();
+        } while (!prioridad.equals("alta") && !prioridad.equals("media") && !prioridad.equals("baja"));
 
-        System.out.print("Introduzca parametro[CPU/RAM]: ");
-        String parametro = input.nextLine();
+        String parametro;
+        do {
+            System.out.print("Introduzca parametro[CPU/RAM]: ");
+            parametro = input.nextLine();
+        } while (!parametro.equals("CPU") && !parametro.equals("RAM"));
         
         String umbral = null;
         boolean thresholdValid = true;
         do {
             thresholdValid = true;
             System.out.print("Introduzca umbral: ");
-            umbral = input.next();
+            umbral = input.nextLine();
 
             try {
                 if (Float.valueOf(umbral) < 0.0) {
