@@ -1,5 +1,7 @@
 import java.io.*;
 import java.lang.String;
+import java.lang.System;
+import java.rmi.RemoteException;
 import java.util.Date;
 
 public class Alarma implements Serializable {
@@ -22,16 +24,18 @@ public class Alarma implements Serializable {
 	private Boolean esMayorQueUmbral; //Solo puede ser editado en la creación del objeto.
 	private Date fecha;	//Editado por el cliente cuando se produce la alarma.
 	private String prioridad; //Solo puede ser editado en la creacion del objeto.
+	private Sensor sensor;
 
 	/* Constructores */
 	public Alarma(String titulo, String descripcion, String parametro,
-		Double umbral, Boolean esMayorQueUmbral, String prioridad) {
+		Double umbral, Boolean esMayorQueUmbral, String prioridad, Sensor s) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;		
 		this.prioridad = prioridad;
 		this.parametro = parametro;
 		this.umbral = umbral;
 		this.esMayorQueUmbral = esMayorQueUmbral;
+		this.sensor = s;
 
 	}
 
@@ -64,22 +68,27 @@ public class Alarma implements Serializable {
 	public String toString() {
 
 		String msg = "ALARMA!";
-		switch (prioridad.toLowerCase()){
-			case "alta":
-				msg = ANSI_RED + fecha + "  -> ALARMA " + prioridad + ANSI_RESET + "\n" +
-						"\tTitulo: " + titulo +
-						"\n\tDescripcion:" + descripcion;
-				break;
-			case "media":
-				msg = ANSI_YELLOW + fecha + "  -> ALARMA " + prioridad + ANSI_RESET + "\n" +
-						"\tTitulo: " + titulo +
-						"\n\tDescripcion:" + descripcion;
-				break;
-			case  "baja":
-				msg = ANSI_GREEN + fecha + "  -> ALARMA " + prioridad + ANSI_RESET + "\n" +
-						"\tTitulo: " + titulo +
-						"\n\tDescripcion:" + descripcion;
-				break;
+
+		try {
+
+			switch (prioridad.toLowerCase()) {
+				case "alta":
+					msg = ANSI_RED + fecha + "  -> ALARMA " + prioridad + ANSI_RESET + "\n";
+					break;
+				case "media":
+					msg = ANSI_YELLOW + fecha + "  -> ALARMA " + prioridad + ANSI_RESET + "\n";
+					break;
+				case "baja":
+					msg = ANSI_GREEN + fecha + "  -> ALARMA " + prioridad + ANSI_RESET + "\n";
+					break;
+			}
+			msg = msg +
+					"\tSensor: " + sensor.getSensorName() + "\n" +
+					"\tTitulo: " + titulo + "\n" +
+					"\tDescripcion:" + descripcion;
+
+		}catch (RemoteException e){
+			System.out.println("Remote exception");
 		}
 
 		return msg;

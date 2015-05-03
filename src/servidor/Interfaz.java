@@ -1,3 +1,5 @@
+import java.lang.NumberFormatException;
+import java.lang.System;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
@@ -73,6 +75,8 @@ public class Interfaz {
                 s = srv.getListaSensores().get(Integer.parseInt(sensorNumber));
             }catch (IndexOutOfBoundsException e){
                 System.out.println("El indice especificado es inválido");
+            }catch (NumberFormatException e){
+                System.out.println("Debe introducir un número");
             }
         }while(s == null);
 
@@ -127,7 +131,7 @@ public class Interfaz {
         } while (!salir);
 
         s.crearAlarma(new Alarma(titulo, descripcion, parametro,
-                Double.valueOf(umbral), esMayorQueUmbralBool, prioridad));
+                Double.valueOf(umbral), esMayorQueUmbralBool, prioridad, s));
 
     }
     private void verAlarmas() throws RemoteException {
