@@ -12,8 +12,7 @@ public class Interfaz {
     }
 
     public void menu() {
-        System.out.print("\033[H\033[2J");
-
+        
         System.out.println("\nRMISENSOR\n");
         System.out.println("0) Regenerar menu");
         System.out.println("1) Ver sensores");
@@ -30,25 +29,31 @@ public class Interfaz {
         while (!opcion.equals("q")) {
             opcion = input.next();
             switch (opcion) {
-                case "0":                    
+                case "0":
+                    System.out.print("\033[H\033[2J");                    
                     this.menu();
                     break;
-                case "1":                    
+                case "1":
+                    System.out.print("\033[H\033[2J");                    
                     this.printSensores();
                     this.menu();
                     break;
                 case "2":                    
+                    System.out.print("\033[H\033[2J");
                     this.crearAlarma();
                     this.menu();
                     break;
                 case "3":                    
+                    System.out.print("\033[H\033[2J");
                     this.verAlarmas();
                     this.menu();
                     break;
-                case "q":                                        
+                case "q":                             
+                    System.out.print("\033[H\033[2J");           
                     this.menu();
                     break;
                 default:                    
+                    System.out.print("\033[H\033[2J");
                     System.out.println("Opcion no valida");
                     this.menu();
                     break;
