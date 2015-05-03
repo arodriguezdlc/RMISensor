@@ -31,22 +31,32 @@ public class Interfaz {
             opcion = input.next();
             switch (opcion) {
                 case "0":
+                    System.out.print("\033[H\033[2J");
                     this.menu();
                     break;
                 case "1":
+                    System.out.print("\033[H\033[2J");
                     this.printSensores();
+                    this.menu();
                     break;
                 case "2":
+                    System.out.print("\033[H\033[2J");
                     this.crearAlarma();
+                    this.menu();
                     break;
                 case "3":
+                    System.out.print("\033[H\033[2J");
                     this.verAlarmas();
+                    this.menu();
                     break;
-                case "q":
+                case "q":                    
                     System.out.println("Apagando servidor");
+                    this.menu();
                     break;
                 default:
+                    System.out.print("\033[H\033[2J");
                     System.out.println("Opcion no valida");
+                    this.menu();
                     break;
             }
         }
