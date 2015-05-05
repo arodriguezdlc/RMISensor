@@ -18,7 +18,7 @@ public class Interfaz {
         System.out.println("1) Ver sensores");
         System.out.println("2) Crear nueva Alarma");
         System.out.println("3) Ver alarmas");
-        System.out.println("4) Eliminar alarma");
+        //System.out.println("4) Eliminar alarma");
         System.out.println("q) Apagar Servidor");
 
         System.out.println("\nSeleccione una opcion: ");
@@ -26,7 +26,7 @@ public class Interfaz {
 
     public void ejecutaOpcion() throws RemoteException {
         Scanner input = new Scanner(System.in);
-        String opcion;
+        String opcion = "";
         while (!opcion.equals("q")) {
             opcion = input.next();
             switch (opcion) {
@@ -49,11 +49,11 @@ public class Interfaz {
                     this.verAlarmas();
                     this.menu();
                     break;
-                case "4":
+                /*case "4":
                     System.out.print("\033[H\033[2J");
                     this.verAlarmas();
                     this.eliminarAlarma();
-                    this.menu();
+                    this.menu();*/
                 case "q":                             
                     System.out.print("\033[H\033[2J");           
                     this.menu();
@@ -161,16 +161,17 @@ public class Interfaz {
             System.out.println(a.toString());
         }
     }
-
+    /* INCOMPLETE - TODO
     private void eliminarAlarma() throws RemoteException {
         System.out.println("Introduzca el numero de alarma");
         Scanner input = new Scanner(System.in);
         String numAlarma = input.nextLine();
         try {
 
-        } catch NumberFormatException {
+        } catch (NumberFormatException e) {
             System.out.println("Numero no valido");
         }
     }
+    */
 }
 
